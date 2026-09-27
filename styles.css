@@ -1,0 +1,460 @@
+/* Workout Coach — styles
+   Designed to be read from across the room: the phone is mirrored to a TV in landscape. */
+
+:root {
+  --bg: #0d1015;
+  --panel: #161a21;
+  --panel-2: #1e242d;
+  --line: #2a313c;
+  --text: #eef1f5;
+  --muted: #98a2b0;
+  --faint: #5d6776;
+  --accent: #3ddc97;          /* go / on / primary action */
+  --accent-ink: #052016;
+  --accent-soft: rgba(61, 220, 151, .12);
+  --rest: #5aa9ff;            /* rest periods */
+  --caution: #f2b45a;         /* safety notes */
+  --danger: #ff6b5e;          /* destructive confirm */
+  --radius: 14px;
+  --pad-l: max(16px, env(safe-area-inset-left, 0px));
+  --pad-r: max(16px, env(safe-area-inset-right, 0px));
+  font-synthesis: none;
+}
+* { box-sizing: border-box; }
+html, body {
+  margin: 0; height: 100%; background: var(--bg); color: var(--text);
+  font: 15px/1.4 -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent;
+}
+button { font: inherit; color: inherit; border: 0; background: none; cursor: pointer; padding: 0; }
+button:active { transform: scale(0.97); }
+[hidden] { display: none !important; }
+h1, h2, h3, p { margin: 0; }
+.muted { color: var(--muted); }
+.label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+
+/* ------------------------------------------------------------------ Home & day */
+.screen { min-height: 100%; padding: calc(20px + env(safe-area-inset-top, 0px)) var(--pad-r) max(24px, env(safe-area-inset-bottom, 0px)) var(--pad-l); }
+.wrap { max-width: 960px; margin: 0 auto; }
+.title { font-size: clamp(24px, 4vw, 32px); font-weight: 750; letter-spacing: -0.015em; line-height: 1.15; }
+.subtitle { color: var(--muted); margin: 6px 0 22px; }
+
+.days { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 12px; }
+.day-card {
+  text-align: left; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 16px; display: flex; flex-direction: column; gap: 4px; min-height: 108px;
+}
+.day-card .day-name { display: flex; justify-content: space-between; }
+.day-card .day-focus { font-size: 19px; font-weight: 650; }
+.day-card .goal { color: var(--muted); font-size: 13px; }
+.day-card.today { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
+.day-card.today .today { color: var(--accent); }
+
+.card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-top: 20px; }
+.card ul { margin: 8px 0 0; padding-left: 18px; }
+.card li { margin: 6px 0; }
+.note { color: var(--muted); font-size: 13px; margin-top: 16px; }
+.link { color: var(--muted); text-decoration: underline; font-size: 13px; }
+.source-note { margin-top: 20px; }
+.brand { color: var(--accent); margin-bottom: 6px; }
+/* after the days, on the example plan: one plain call to action */
+.cta { margin: 28px 0 8px; }
+.cta p { color: var(--muted); margin-bottom: 10px; }
+.cta .big-btn { display: block; width: 100%; max-width: 480px; border-radius: 12px; }   /* as wide as the cards on a phone */
+.tv-tip { margin-top: 20px; }
+.wrap.narrow { max-width: 640px; }
+.card-text { color: var(--muted); margin: 8px 0 0; line-height: 1.45; }
+.card-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
+.card-actions .big-btn { min-width: 0; }
+.card-actions .note { margin: 0; }
+/* Create: how it works as three small pictures (pick an AI, chat, tap the link), then the AIs */
+.how { list-style: none; margin: 16px 0 8px; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.how li { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.how > li > b { font-size: 14px; line-height: 1.25; margin-top: 8px; }
+.how li > span { color: var(--muted); font-size: 12px; line-height: 1.3; }
+.mock { position: relative; height: 128px; border-radius: 14px; background: var(--panel); border: 1px solid var(--line); padding: 10px 8px;
+  display: flex; flex-direction: column; gap: 5px; overflow: hidden; font-size: 10px; line-height: 1.25; }
+.mock.pick span { padding: 5px 7px; border-radius: 7px; background: var(--panel-2); font-weight: 650; }
+.mock.pick span.on { background: var(--accent-soft); color: var(--accent); }
+.mock.chat p { margin: 0; padding: 5px 7px; border-radius: 9px; max-width: 88%; }
+.mock.chat .them { align-self: flex-start; background: var(--panel-2); }
+.mock.chat .me { align-self: flex-end; background: var(--accent); color: var(--accent-ink); font-weight: 650; }
+.mock u { color: var(--accent); }
+.mock-week { margin-top: auto; padding: 5px 7px; border-radius: 8px; background: var(--bg); border: 1px solid var(--accent); display: flex; flex-direction: column; gap: 1px; }
+.mock-week span { color: var(--muted); }
+.mock .tap { position: absolute; width: 18px; height: 18px; border-radius: 50%; background: rgba(255, 255, 255, .5); box-shadow: 0 0 0 5px rgba(255, 255, 255, .18); }
+.mock.pick .tap { left: 70%; top: 38px; }
+.mock.chat .tap { left: 30px; top: 54px; width: 16px; height: 16px; }   /* a fingertip on "open" */
+/* Home Screen sheet: a browser menu with the item to tap last, and the icon on a Home Screen */
+.mock.menu { justify-content: flex-end; }
+.mock.menu span { padding: 5px 7px; border-radius: 7px; background: var(--panel-2); color: var(--muted); }
+.mock.menu span.on { background: var(--accent-soft); color: var(--accent); font-weight: 650; }
+.mock.menu .tap { right: 4px; bottom: 16px; width: 12px; height: 12px; box-shadow: 0 0 0 4px rgba(255, 255, 255, .18); }
+.mock.bar { flex-direction: row; align-items: flex-start; gap: 6px; }
+.mock.bar .url { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding: 5px 7px; border-radius: 999px; background: var(--panel-2); color: var(--muted); }
+.mock.bar .on { padding: 3px 8px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); font-weight: 750; font-size: 13px; }
+.mock.bar .tap { right: 2px; top: 22px; width: 12px; height: 12px; box-shadow: 0 0 0 4px rgba(255, 255, 255, .18); }
+.mock.icons { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px 6px; align-content: start; }
+.mock.icons figure { position: relative; margin: 0; text-align: center; color: var(--text); }
+.mock.icons img, .mock.icons figure > i:only-child { display: block; width: 100%; aspect-ratio: 1; border-radius: 22%; }
+.mock.icons figure > i:only-child { background: var(--panel-2); }
+.mock.icons figcaption { font-size: 9px; margin-top: 2px; }
+.mock.icons .tap { right: -3px; bottom: 12px; width: 12px; height: 12px; box-shadow: 0 0 0 4px rgba(255, 255, 255, .18); }
+#home-how { margin: 0; }
+.ai-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.copied { margin: 12px 0 0; padding: 12px 14px; border-radius: 12px; background: var(--accent-soft); color: var(--text); font-size: 15px; line-height: 1.4; }
+.ai-btn { display: flex; flex-direction: column; justify-content: center; min-height: 56px; padding: 10px 16px; border-radius: 12px;
+  background: var(--panel); border: 1px solid var(--line); color: var(--text); font-weight: 650; font-size: 16px; text-decoration: none; text-align: left; }
+.ai-btn b { font-size: 17px; }
+.ai-btn small { font-weight: 400; font-size: 13px; color: var(--muted); margin-top: 2px; }
+.fix-msg { margin-top: 8px; white-space: pre-wrap; user-select: text; -webkit-user-select: text; }
+
+.day-head { display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+.back { padding: 10px 14px; border-radius: 10px; background: var(--panel-2); }
+/* an optional section (warm-up, cool-down): the switch sits in its header */
+.section-head { display: flex; align-items: center; gap: 10px; margin: 20px 0 8px; }
+.section-head small { flex: 1; color: var(--muted); font-size: 13px; }
+.switch { width: 42px; height: 24px; border-radius: 12px; background: var(--line); position: relative; flex: none; transition: background .15s; }
+.switch::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: left .15s; }
+.switch[aria-pressed="true"] { background: var(--accent); }
+.switch[aria-pressed="true"]::after { left: 21px; }
+
+.section-label { margin: 20px 0 8px; }
+.ex-list { display: flex; flex-direction: column; gap: 8px; }
+.ex-row {
+  display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+  background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px;
+}
+.ex-row img { width: 96px; height: auto; aspect-ratio: 16/9; object-fit: cover; border-radius: 8px; background: var(--panel-2); flex: none; }
+.ex-row .ex-title { font-weight: 600; }
+.ex-row .ex-meta { color: var(--muted); font-size: 13px; }
+.ex-row > div { flex: 1; min-width: 0; }
+.ex-row .chev, .plan-day .chev { color: var(--faint); font-size: 18px; flex: none; }
+
+/* ------------------------------------------------------------------ Muscle map (Figure in app.js) */
+.fig { display: inline-block; flex: none; }
+.fig svg { display: block; width: 100%; height: 100%; }
+.fig.badge { width: 44px; height: 44px; border-radius: 50%; overflow: hidden; background: var(--panel-2); }
+/* Both views of both figures are drawn into the same fixed frame (the widest figure's shape), so
+   the male and female figures are the same height and nothing around them moves when switching */
+.fig.full { --h: 150px; display: flex; gap: 6px; height: var(--h); width: calc(var(--h) * 0.82 + 6px); }
+.fig.full svg { height: 100%; width: calc(var(--h) * 0.41); flex: none; }
+/* day card: the figures with the swap icon under them; the key sits beside the figures (not the
+   icon) and is sized to stay within their height */
+.day-muscles { display: grid; grid-template-columns: auto 1fr; column-gap: 18px; row-gap: 4px; align-items: center;
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 20px 10px; margin-bottom: 10px; }
+.day-muscles .fig.full { --h: 136px; margin-top: 10px; }   /* room above and below: the figure shouldn't touch the card's edges */
+.day-muscles .fig-toggle { justify-self: center; }
+.day-muscles .muscle-groups { grid-column: 2; grid-row: 1; align-self: start; margin-top: 30px; }   /* from about ear level, whatever its length */
+.day-muscles .label { font-size: 10px; }
+.day-muscles .names { font-size: 14px; line-height: 1.35; }
+.day-muscles .muscle-group + .muscle-group { margin-top: 10px; }
+.fig-toggle { color: var(--faint); padding: 6px; border-radius: 8px; line-height: 0; }
+/* the key: a bar drawn like the muscles it stands for (solid main, striped helping) */
+.muscle-group { position: relative; padding: 2px 0 2px 16px; text-align: left; }
+.muscle-group + .muscle-group { margin-top: 14px; }
+.muscle-group::before { content: ""; position: absolute; left: 0; top: 2px; bottom: 2px; width: 6px; border-radius: 3px; background: #3ddc97; }
+.muscle-group.help::before { background: repeating-linear-gradient(-45deg, #3ddc97 0 1px, #4b5260 1px 3px); }   /* the figure's stripes, at this size */
+.muscle-group .names { margin-top: 3px; line-height: 1.4; }
+.muscle-group.help .names { color: var(--muted); }
+.finished .muscle-groups { max-width: 340px; }
+/* player: the badge sits to the right of the name and target, so it never adds height */
+.head { display: flex; align-items: center; gap: inherit; column-gap: 12px; }
+.head-text { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: inherit; align-items: flex-start; }
+.head .fig.badge { width: clamp(48px, 13vh, 76px); height: clamp(48px, 13vh, 76px); }
+.context { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.context .muscles { color: var(--muted); }
+.upnext { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.upnext .fig.badge { width: clamp(48px, 12vh, 72px); height: clamp(48px, 12vh, 72px); }
+.finished .fig.full { --h: clamp(110px, 34vh, 260px); margin-top: 6px; }
+.match-card { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 8px; }
+
+.start-bar {
+  position: sticky; bottom: 0; margin: 20px calc(-1 * var(--pad-r)) 0 calc(-1 * var(--pad-l));
+  padding: 16px var(--pad-r) max(12px, env(safe-area-inset-bottom, 0px)) var(--pad-l);
+  background: linear-gradient(transparent, var(--bg) 40%); display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;
+}
+.big-btn { background: var(--accent); color: var(--accent-ink); font-weight: 750; font-size: 18px; padding: 15px 30px; border-radius: 999px; min-width: 240px; }
+
+/* ------------------------------------------------------------------ Tabs (top-level screens only) */
+.tabbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; display: flex; justify-content: center; gap: 8px;
+  background: rgba(13, 16, 21, .96); border-top: 1px solid var(--line);
+  padding: 6px var(--pad-r) max(8px, env(safe-area-inset-bottom, 0px)) var(--pad-l); }
+.tabbar button { flex: 0 1 140px; display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px 0; color: var(--muted); font-size: 11px; font-weight: 600; }
+.tabbar svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.tabbar button[aria-current="page"] { color: var(--accent); }
+.screen.tabbed { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+
+/* ------------------------------------------------------------------ Plans */
+.ex-tags { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 12px; }
+.tag { padding: 3px 10px; border-radius: 999px; background: var(--panel-2); color: var(--muted); font-size: 13px; }
+.plans-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; }
+.link-accent { color: var(--accent); font-weight: 650; font-size: 15px; }
+.plan-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); grid-auto-rows: 1fr; gap: 12px; margin-top: 6px; }
+/* plan cards (like a fitness app's featured card): the photo across the top fades into the card, and
+   below it the card makes one statement: days a week, the name, level and kit, and a clear way in */
+.plan-tile, .plan-hero { --base: #161b22; position: relative; overflow: hidden; border-radius: 16px; color: #fff; background: var(--base); isolation: isolate; text-align: left; }
+.plan-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; z-index: -2; }
+.plan-tile .plan-photo { height: 210px; }
+.plan-tile::before, .plan-hero::before { content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, rgb(0 0 0 / .15) 0, transparent 60px, transparent 120px, var(--base) 210px); }
+.plan-tile { display: flex; flex-direction: column; justify-content: flex-end; gap: 6px; min-height: 310px; padding: 18px 40px 18px 18px; }
+.plan-days { font-size: 15px; font-weight: 600; color: rgba(255, 255, 255, .9); }
+.plan-days b { font-size: 30px; font-weight: 800; letter-spacing: -0.02em; margin-right: 2px; }
+.plan-days small { font-size: 14px; font-weight: 500; color: rgba(255, 255, 255, .75); }
+.plan-name { font-size: 26px; font-weight: 800; line-height: 1.1; letter-spacing: -0.015em; }
+.plan-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 14px; color: rgba(255, 255, 255, .8); }
+.plan-level { font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 6px; background: #fff; color: #10141a; }
+.plan-chev { position: absolute; right: 16px; bottom: 18px; font-size: 26px; line-height: 1; color: rgba(255, 255, 255, .55); }
+.plan-tile .mine { position: absolute; top: 14px; left: 14px; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: var(--accent); color: var(--accent-ink); }
+/* a plan's preview opens on its photo, the title on a shade at its foot */
+.plan-hero::before { background: linear-gradient(0deg, rgb(8 10 14 / .92) 0%, rgb(8 10 14 / .6) 40%, rgb(8 10 14 / 0) 75%); }
+.plan-hero { display: flex; align-items: flex-end; min-height: 200px; padding: 18px; margin-bottom: 10px; }
+.plan-hero .title { margin: 0; color: #fff; }
+.plan-hero .plan-days { display: block; margin-bottom: 2px; }
+.view-meta { margin: 0 0 10px; color: var(--muted); }
+.view-meta .plan-level { background: var(--text); color: var(--bg); }
+/* My week opens on your plan's photo */
+.week-hero { min-height: 210px; margin: 6px 0 18px; }
+.week-hero .plan-photo { object-position: 50% 20%; }
+.week-hero .subtitle { margin: 4px 0 0; color: rgba(255, 255, 255, .82); }
+.create-tile { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding: 16px 18px; border-radius: 16px; background: var(--panel); border: 1px dashed #3a4250; }
+/* Create: paste the link back from the chat */
+.paste-card { margin-top: 14px; }
+.paste-card.back { border-color: var(--accent); }   /* back from the chat: this is the next step */
+.paste-card .muted { margin: 4px 0 10px; font-size: 14px; }
+.paste-row { display: flex; gap: 8px; }
+.paste-row input { flex: 1; min-width: 0; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--text); font: inherit; font-size: 16px; }
+.paste-row .big-btn { min-width: 0; padding: 0 20px; border-radius: 12px; }
+.create-tile .link-accent { align-self: flex-start; margin-top: 6px; }
+#plan-view-back { margin-bottom: 12px; }
+.plan-day { margin-top: 10px; width: 100%; display: flex; align-items: center; gap: 12px; text-align: left; }
+.plan-day > span:first-child { flex: 1; min-width: 0; }
+.plan-day .label { display: block; }
+.plan-day b { display: block; margin: 2px 0 4px; font-size: 16px; }
+.plan-day .muted { display: block; font-size: 14px; }
+#plan-start:disabled { background: var(--panel-2); color: var(--muted); }
+.sheet-wrap { position: fixed; inset: 0; z-index: 30; background: rgba(0, 0, 0, .6); display: flex; align-items: flex-end; justify-content: center; }
+.sheet { width: 100%; max-width: 520px; background: var(--panel); border: 1px solid var(--line); border-radius: 18px 18px 0 0;
+  padding: 20px var(--pad-r) max(20px, env(safe-area-inset-bottom, 0px)) var(--pad-l); display: flex; flex-direction: column; gap: 12px; }
+.sheet h2 { font-size: 19px; }
+.sheet .big-btn { min-width: 0; width: 100%; border-radius: 12px; }
+.ghost-btn { padding: 13px; border-radius: 12px; border: 1px solid var(--line); color: var(--text); font-weight: 600; }
+/* My week: one row for changing, sharing or switching the plan, and the sheet it opens */
+.menu-row, .menu-opt { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; }
+.menu-row { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; margin-top: 18px; }
+.menu-row + .menu-row { margin-top: 10px; }
+.menu-row > span:nth-child(2), .menu-opt > span:last-child { flex: 1; min-width: 0; }
+.menu-row b, .menu-opt b { display: block; font-size: 15px; font-weight: 650; }
+.menu-row small, .menu-opt small { display: block; color: var(--muted); font-size: 13px; margin-top: 1px; }
+.menu-row .chev { color: var(--faint); font-size: 18px; }
+.menu-ic { width: 36px; height: 36px; border-radius: 10px; background: var(--panel-2); color: var(--accent); display: flex; align-items: center; justify-content: center; flex: none; }
+.menu-opts { display: flex; flex-direction: column; }
+.menu-opt { padding: 12px 2px; }
+.menu-opt + .menu-opt { border-top: 1px solid var(--line); }
+#plan-menu-status:empty { display: none; }
+/* My week with no plan: the screen is one photo with the choices at its foot, above the tabs */
+#home.no-plan { display: flex; flex-direction: column; min-height: 100vh; min-height: 100dvh; }
+#home.no-plan .wrap { flex: 1; display: flex; flex-direction: column; width: 100%; }
+.week-empty { flex: 1; display: flex; flex-direction: column; gap: 12px; margin-top: 6px; }
+.empty-hero { flex: 1; min-height: 240px; margin: 0; padding: 22px 20px; }
+.empty-hero .plan-photo { object-position: 50% 25%; }
+.empty-hero .title { font-size: 30px; }
+.empty-text { margin-top: 8px; color: rgba(255, 255, 255, .85); max-width: 34ch; }
+.empty-perks { margin-top: 12px; font-size: 13px; font-weight: 600; color: var(--accent); }
+.empty-actions { display: grid; gap: 10px; }
+@media (min-width: 700px) { .empty-actions { grid-template-columns: 1fr 1fr; } }
+.empty-actions > * { width: 100%; min-width: 0; border-radius: 14px; }
+.empty-actions .ghost-btn { padding: 15px; font-size: 16px; }
+#home.no-plan .note { margin-top: 12px; text-align: center; }
+
+/* ------------------------------------------------------------------ Exercises */
+.search { width: 100%; margin: 14px 0 10px; padding: 11px 14px; border-radius: 12px; border: 1px solid var(--line);
+  background: var(--panel); color: var(--text); font: inherit; font-size: 16px; }
+.search::placeholder { color: var(--faint); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.chip { padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); color: var(--muted); font-size: 13px; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); font-weight: 650; }
+.filter-note { margin-top: 4px; }
+
+/* ------------------------------------------------------------------ Player */
+#player { position: fixed; top: 0; left: 0; right: 0; height: 100vh; height: 100dvh;   /* the visible screen, also as a Home Screen app */
+  display: flex; flex-direction: column; background: var(--bg);
+  padding: env(safe-area-inset-top, 0px) env(safe-area-inset-right, 0px) env(safe-area-inset-bottom, 0px) env(safe-area-inset-left, 0px); }
+
+/* top bar */
+.bar { display: flex; align-items: center; gap: 8px; padding: 6px 10px; }
+.bar .where { flex: 1; min-width: 0; font-size: 13px; color: var(--muted); }
+.bar .where .line { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.progress { height: 3px; background: var(--line); border-radius: 2px; overflow: hidden; margin-top: 5px; }
+.progress i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .3s; }
+.tool { min-height: 40px; min-width: 40px; padding: 0 12px; border-radius: 10px; background: var(--panel-2);
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: 14px; white-space: nowrap; }
+.demos { display: flex; align-items: center; gap: 4px; }
+.demos .count { color: var(--muted); font-size: 12px; padding: 0 4px; max-width: 12em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-variant-numeric: tabular-nums; }
+.sound { color: var(--muted); font-size: 13px; font-weight: 600; min-width: 64px; }
+.sound.on { color: var(--accent); background: var(--accent-soft); }
+.sound.on.idle { opacity: .45; }             /* chosen, but this demo has no voice */
+
+/* body: video left, coaching panel right */
+.stage { flex: 1; min-height: 0; display: grid; grid-template-columns: 1.3fr 1fr; }
+.video { position: relative; background: #000; min-height: 0; overflow: hidden; }
+/* During a rest the next demo is covered by a still of it (tap to watch) */
+.rest-cover { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; background: #000; color: #fff; text-align: center; width: 100%; }
+.rest-cover img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .35; }
+.rest-cover-text { position: relative; display: flex; flex-direction: column; gap: 6px; padding: 16px; }
+.rest-cover small { font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--rest); }
+.rest-cover b { font-size: clamp(20px, 5vh, 32px); font-weight: 750; line-height: 1.15; }
+.rest-cover em { font-style: normal; font-size: 13px; color: rgba(255, 255, 255, .7); }
+.video iframe, #yt { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.video .hint { position: absolute; left: 50%; top: 12px; transform: translateX(-50%); max-width: 90%; pointer-events: none;
+  background: rgba(0,0,0,.82); color: #fff; font-size: 14px; font-weight: 600; padding: 8px 12px; border-radius: 8px; text-align: center; }
+.video .fallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+  color: var(--muted); background: #000; text-align: center; padding: 20px; }
+.video .fallback a { color: var(--accent); }
+
+/* coaching panel: content that never squeezes (scrolls if it must) + buttons pinned to the bottom */
+.panel { display: flex; flex-direction: column; min-height: 0; overflow: hidden;
+  padding: clamp(10px, 2.6vh, 26px) clamp(14px, 2.2vw, 28px); --gap: clamp(6px, 1.6vh, 14px); gap: var(--gap); }
+.panel-body { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: inherit; }
+.panel-body > * { flex-shrink: 0; }
+/* between the groups (what · how · safety): room that grows with the free space, up to a limit,
+   so a tall panel spreads its content instead of leaving one empty block above the buttons */
+.panel-body > .grow { flex: 1 0 0; max-height: clamp(10px, 6vh, 56px); margin-top: calc(-1 * var(--gap)); }   /* a full panel: no extra space */
+.context { font-size: clamp(12px, 2.4vh, 14px); font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.context .side { color: var(--text); }
+.context.rest { color: var(--rest); }
+.name { font-size: clamp(22px, 6vh, 38px); font-weight: 750; line-height: 1.1; letter-spacing: -0.015em; }
+.target { align-self: flex-start; display: inline-flex; align-items: baseline; gap: 6px; border-radius: 999px;
+  padding: clamp(4px, 1vh, 7px) clamp(12px, 1.4vw, 16px); background: var(--panel-2); font-size: clamp(14px, 3vh, 18px); color: var(--muted); }
+.target b { color: var(--text); font-size: 1.15em; font-variant-numeric: tabular-nums; }
+/* the set tracker: a bar per set (done, now, to come) and "Set 2 of 3" / "Last set" */
+.sets { display: inline-flex; align-items: center; gap: 4px; flex: none; }
+.sets i { width: clamp(14px, 3vh, 22px); height: 6px; border-radius: 3px; background: var(--line); }
+.sets i.done { background: var(--accent); opacity: .45; }
+.sets i.now { background: var(--accent); }
+.sets em { font-style: normal; font-weight: 700; font-size: clamp(13px, 2.8vh, 16px); color: var(--text); margin-left: 6px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hold-side { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; min-width: 0; }   /* beside the countdown: the set, then Hold / Get in position */
+.upnext .label.next-set { color: var(--accent); font-size: 13px; }
+.hold { display: flex; align-items: center; gap: 12px; }
+.hold .clock { font-size: clamp(36px, 11vh, 72px); font-weight: 800; line-height: 1; font-variant-numeric: tabular-nums; letter-spacing: -0.02em; }
+.hold .state { color: var(--muted); font-size: clamp(13px, 2.8vh, 17px); }
+.hold.ready .clock { color: var(--muted); }
+
+.focus { border-left: 3px solid var(--accent); padding: 2px 0 2px 12px; }
+.focus p { font-size: clamp(15px, 3.4vh, 20px); font-weight: 650; line-height: 1.25; }
+.form { display: flex; flex-direction: column; gap: 6px; }
+.cues { list-style: none; margin: 0; padding: 0; font-size: clamp(14px, 3vh, 17px); line-height: 1.35; cursor: pointer; }
+.cues li { color: var(--faint); padding: 3px 0; transition: color .25s; }
+.cues li.on { color: var(--text); }
+.dots { display: none; gap: 5px; }
+.dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--line); }
+.dots i.on { background: var(--text); }
+.safety { font-size: clamp(12px, 2.5vh, 14px); color: var(--caution); line-height: 1.3; }
+/* a preview's quick facts: equipment beside the target, joints with the safety line */
+.target-row { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; min-width: 0; align-self: stretch; }
+.target-row .target { flex: none; }
+.target-row .equip { flex: 1 1 9em; }   /* too little room beside the target: it goes under it */
+.equip, .joints { font-size: clamp(12px, 2.5vh, 14px); color: var(--muted); line-height: 1.3; }
+.panel-body > .joints { margin-top: calc(-0.5 * var(--gap)); }   /* one group with the safety line */
+.rest-facts { font-size: clamp(12px, 2.5vh, 14px); color: var(--muted); line-height: 1.3; }
+.safety::before { content: "⚠︎ "; }
+
+.controls { flex-shrink: 0; display: flex; gap: 8px; }
+.ctl { min-height: clamp(40px, 8vh, 52px); padding: 0 16px; border-radius: 12px; background: var(--panel-2); font-weight: 600; font-size: clamp(14px, 3vh, 16px); }
+.ctl.primary { flex: 1; background: var(--accent); color: var(--accent-ink); font-weight: 800; font-size: clamp(16px, 3.6vh, 20px); }
+.ctl.primary.rest { background: var(--rest); color: #041426; }
+
+.ring { position: relative; width: clamp(100px, 32vh, 200px); aspect-ratio: 1; align-self: center; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring .num { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  font-size: clamp(30px, 10vh, 64px); font-weight: 800; font-variant-numeric: tabular-nums; }
+.rest-main { display: flex; flex-direction: column; gap: clamp(8px, 2vh, 16px); min-height: 0; }
+.rest-info { display: flex; flex-direction: column; gap: clamp(6px, 1.6vh, 14px); }
+.upnext h3 { font-size: clamp(17px, 4vh, 24px); font-weight: 700; line-height: 1.2; margin-top: 2px; }
+.upnext .muted { font-size: clamp(12px, 2.6vh, 15px); }
+
+.finished { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; }
+
+
+/* ------------------------------------------------------------------ Diagnostics */
+#diag-text { max-height: 50vh; overflow: auto; font-size: 11px; line-height: 1.35; white-space: pre-wrap; word-break: break-word;
+  background: var(--bg); padding: 8px; border-radius: 8px; margin: 8px 0 0; user-select: text; -webkit-user-select: text; }
+.diag-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 8px; }
+
+/* ------------------------------------------------------------------ Phone, landscape (what the TV shows) */
+@media (orientation: landscape) and (max-height: 520px) {
+  /* plan cards lie on their side: the photo on the left, the statement beside it */
+  .plan-tile { min-height: 180px; padding: 14px 36px 14px calc(42% + 16px); gap: 4px; }
+  .plan-tile .plan-photo { width: 42%; height: 100%; }
+  .plan-tile::before { background: linear-gradient(90deg, transparent 0, transparent calc(42% - 60px), var(--base) 42%); }
+  .plan-days b { font-size: 24px; }
+  .plan-name { font-size: 20px; }
+
+  .plan-hero { min-height: 150px; }
+  .empty-hero { min-height: 150px; padding: 16px 18px; }
+  .empty-hero .title { font-size: 24px; }
+  .empty-actions { grid-template-columns: 1fr 1fr; }
+  .tabbar { padding-top: 3px; padding-bottom: max(4px, env(safe-area-inset-bottom, 0px)); }
+  .tabbar button span { display: none; }
+  .screen.tabbed { padding-bottom: calc(50px + env(safe-area-inset-bottom, 0px)); }
+  .bar { padding: 3px 8px; gap: 6px; }
+  .tool { min-height: 34px; }
+  .sound { min-width: 56px; }
+  .stage { grid-template-columns: 1.12fr 1fr; }
+  .panel { padding: 6px 14px; --gap: 4px; }
+  .context { font-size: 11px; }
+  .name { font-size: 22px; }
+  .target { font-size: 14px; padding: 3px 12px; }
+  .hold .clock { font-size: 40px; }
+  .focus { padding: 0 0 0 10px; }
+  .focus p { font-size: 15px; line-height: 1.2; }
+  .form { gap: 3px; }
+  .cues { font-size: 16px; line-height: 1.28; min-height: 2.56em; }
+  .cues li { display: none; padding: 0; }
+  .cues li.on { display: block; }
+  .dots { display: flex; }
+  .safety { font-size: 12px; line-height: 1.25; }
+  .equip, .joints, .rest-facts { font-size: 12px; line-height: 1.25; }
+  .ctl { min-height: 40px; font-size: 15px; }
+  .ctl.primary { font-size: 17px; }
+  .rest-main { flex-direction: row; align-items: center; gap: 16px; }   /* ring beside "up next" on short screens */
+  .ring { width: 104px; flex: none; }
+  .ring .num { font-size: 36px; }
+  .upnext h3 { font-size: 18px; }
+  .head { column-gap: 10px; }
+  .head .fig.badge, .upnext .fig.badge { width: 46px; height: 46px; }
+  /* "Workout complete": the figure beside the text, which stacks in the second column */
+  .finished { display: grid; grid-template-columns: auto auto; grid-auto-flow: dense; align-content: center; justify-content: center;
+    justify-items: start; column-gap: 28px; row-gap: 6px; text-align: left; }
+  .finished > * { grid-column: 2; }
+  .finished .fig.full { --h: 62vh; grid-column: 1; grid-row: 1 / span 5; align-self: center; margin: 0; }
+}
+
+/* ------------------------------------------------------------------ Phone, portrait */
+@media (orientation: portrait) and (max-width: 700px) {
+  .bar { padding-top: 8px; }                    /* breathing room under the Dynamic Island */
+  .bar .where .line { display: none; }
+  .demos .count, #vid-restart { display: none; }
+  .tool { min-height: 44px; min-width: 44px; }
+  .stage { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .video { aspect-ratio: 16/9; }
+  .panel { padding: 12px 16px 10px; --gap: 8px; }
+  .name { font-size: 26px; }
+  .cues li { display: none; padding: 0; }
+  .cues li.on { display: block; }
+  .cues { min-height: 2.7em; }
+  .dots { display: flex; }
+  .rest-main { flex-direction: row; align-items: center; gap: 16px; }
+  .ring { width: 118px; flex: none; }
+  /* the name keeps the full width; the badge sits beside the target or countdown */
+  .head { display: grid; grid-template-columns: 1fr auto; align-items: center; }
+  .head-text { display: contents; }
+  .head .name { grid-column: 1 / -1; }
+  .head .target-row { grid-column: 1; }
+  .head .hold { grid-column: 1; justify-self: start; }
+  .head .fig.badge { grid-column: 2; width: 48px; height: 48px; }
+  .sets i { width: 12px; }
+  .hold { gap: 10px; }
+  .ring .num { font-size: 40px; }
+}

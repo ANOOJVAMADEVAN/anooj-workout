@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Anooj Workout">
+<meta name="theme-color" content="#0d1015">
+<!-- The deploy stamps each release's commit here and on the file links below (?v=), so a phone never
+     mixes a new page with old cached scripts; locally it stays "dev" -->
+<meta name="build" content="6df8df7">
+<title>Anooj Workout</title>
+<meta name="description" content="Anooj's personal workout coach — demo videos, coach voice and timers. Pick a plan or make one with AI.">
+<meta property="og:title" content="Anooj Workout">
+<meta property="og:description" content="Anooj's personal workout coach — demo videos, coach voice and timers. Pick a plan or make one with AI.">
+<meta property="og:image" content="docs/share.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Anooj Workout: mid-set with a demo video, the exercise and a Done button">
+<meta property="og:site_name" content="Anooj Workout">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://www.youtube.com">
+<link rel="preconnect" href="https://i.ytimg.com">
+<link rel="stylesheet" href="styles.css?v=6df8df7">
+</head>
+<body>
+<!-- Stripes for helping muscles on every muscle figure (Figure.COLORS.help) -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+  <pattern id="fig-help" patternUnits="userSpaceOnUse" width="16" height="16" patternTransform="rotate(45)">
+    <rect width="16" height="16" fill="#4b5260"/><rect width="7" height="16" fill="#3ddc97"/></pattern></defs></svg>
+
+<!-- Home: the plan's days -->
+<section id="home" class="screen tabbed">
+  <div class="wrap">
+    <div class="label brand">Anooj Workout</div>
+    <div class="plan-hero week-hero" id="week-hero"><img class="plan-photo" id="week-photo" alt="">
+      <div><h1 class="title" id="plan-title"></h1><p class="subtitle" id="plan-subtitle"></p></div></div>
+    <div class="days" id="days"></div>
+    <div id="plan-card"></div>
+    <div class="sheet-wrap" id="plan-menu" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="plan-menu-title">
+        <div><h2 id="plan-menu-title"></h2><p class="muted">Your week</p></div>
+        <div class="menu-opts" id="plan-menu-opts"></div>
+        <p class="note" id="plan-menu-status" aria-live="polite"></p>
+        <button class="ghost-btn" id="plan-menu-cancel">Cancel</button>
+      </div>
+    </div>
+    <div class="sheet-wrap" id="home-sheet" hidden>
+      <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="home-sheet-title">
+        <div><h2 id="home-sheet-title">Add to your Home Screen</h2><p class="muted">It opens full screen like an app, with your plan in it.</p></div>
+        <ol class="how" id="home-how"></ol>
+        <button class="big-btn" id="home-install" hidden>Install</button>
+        <button class="ghost-btn" id="home-done">Got it</button>
+      </div>
+    </div>
+    <!-- No plan yet: a photo fills the screen, the choices sit at the bottom where a thumb reaches -->
+    <div class="week-empty" id="week-empty" hidden>
+      <div class="plan-hero empty-hero"><img class="plan-photo" id="empty-photo" alt="">
+        <div><h1 class="title">Your week starts here</h1>
+          <p class="empty-text">Pick a ready-made plan, or have an AI build one around your goals.</p>
+          <p class="empty-perks">Demo videos · A coach voice · Timers</p></div></div>
+      <div class="empty-actions"><button class="big-btn" id="week-browse">Browse plans</button><button class="ghost-btn" id="week-create">Create your own with AI</button></div>
+    </div>
+    <p class="note">Your local copy · based on <a class="link" href="https://github.com/ashwinr93/workout" target="_blank" rel="noopener">ashwinr93/workout</a> · <button class="link" id="diag-open">Diagnostics</button></p>
+    <div class="card" id="diag" hidden>
+      <div class="label">Diagnostics</div>
+      <p class="note" style="margin-top:6px">If something misbehaves, run the phone check, then copy the log and paste it to Claude.</p>
+      <div class="diag-actions">
+        <button class="tool" id="diag-check">Run phone check</button>
+        <button class="tool" id="diag-copy">Copy log</button>
+        <button class="tool" id="diag-clear">Clear</button>
+        <span class="note" id="diag-status" style="margin:0"></span>
+      </div>
+      <div id="diag-video" style="width:200px;aspect-ratio:16/9;margin-top:8px" hidden></div>
+      <pre id="diag-text"></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Plans: ready-made plans to browse, and creating your own with AI -->
+<section id="plans" class="screen tabbed" hidden>
+  <div class="wrap">
+    <div class="plans-head"><h1 class="title">Plans</h1><button class="link-accent" id="plans-create">+ Create</button></div>
+    <div class="chips" id="plans-goals" role="group" aria-label="Goal"></div>
+    <div id="plans-list"></div>
+    <!-- For someone who'd like to make their own version -->
+    <p class="note source-note">Your local copy · based on <a class="link" href="https://github.com/ashwinr93/workout" target="_blank" rel="noopener">ashwinr93/workout</a></p>
+  </div>
+</section>
+
+<!-- One ready-made plan: what's in it, and starting it -->
+<section id="plan-view" class="screen" hidden>
+  <div class="wrap narrow">
+    <button class="back" id="plan-view-back">‹ Plans</button>
+    <div id="plan-view-body"></div>
+    <div class="start-bar"><button class="big-btn" id="plan-start">Start this plan</button></div>
+  </div>
+  <div class="sheet-wrap" id="plan-confirm" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="plan-confirm-title">
+      <h2 id="plan-confirm-title"></h2>
+      <p class="muted" id="plan-confirm-text"></p>
+      <button class="big-btn" id="plan-confirm-yes">Start this plan</button>
+      <button class="ghost-btn" id="plan-confirm-no"></button>
+    </div>
+  </div>
+</section>
+
+<!-- Exercises: the whole library, searchable -->
+<section id="exercises" class="screen tabbed" hidden>
+  <div class="wrap">
+    <h1 class="title">Exercises</h1>
+    <input class="search" id="ex-search" type="search" placeholder="Search exercises" autocomplete="off" aria-label="Search exercises">
+    <div class="chips" id="ex-gear" role="group" aria-label="Equipment"></div>
+    <div class="chips" id="ex-area" role="group" aria-label="Body area"></div>
+    <p class="note filter-note" id="ex-note" role="status"></p>
+    <div id="ex-results"></div>
+  </div>
+</section>
+
+<!-- Day: what's in the session, warm-up / cool-down toggles -->
+<section id="day" class="screen" hidden>
+  <div class="wrap">
+    <div class="day-head">
+      <button class="back" id="day-back">‹ Days</button>
+      <div><div class="label" id="day-kicker"></div><h1 class="title" id="day-title"></h1></div>
+    </div>
+    <div id="day-body"></div>
+    <div class="start-bar" id="start-bar"></div>
+  </div>
+</section>
+
+<!-- Create or change a plan by chatting with an AI -->
+<section id="create" class="screen" hidden>
+  <div class="wrap narrow">
+    <div class="day-head">
+      <button class="back" id="create-back">‹ Back</button>
+      <h1 class="title" id="create-title"></h1>
+    </div>
+    <p class="card-text" id="create-intro"></p>
+    <!-- Shown once you've gone to a chat and come back (or asked for it): where the link goes -->
+    <div class="card paste-card" id="paste-card" hidden>
+      <b id="paste-title"></b>
+      <p class="muted" id="paste-text"></p>
+      <form class="paste-row" id="plan-paste-form">
+        <input id="plan-paste" type="text" inputmode="url" placeholder="Your plan link" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Your plan link">
+        <button class="big-btn" type="submit" id="plan-paste-go">Paste</button>
+      </form>
+      <p class="note" id="plan-paste-status" role="status"></p>
+    </div>
+    <ol class="how" id="create-how"></ol>
+    <div class="label section-label">Choose your AI</div>
+    <div class="ai-list" id="ai-list"></div>
+    <p class="copied" id="create-status" role="status" hidden></p>
+    <p class="note"><button class="link" id="copy-prompt">Using another AI? Copy the message</button> · <button class="link" id="show-paste">Already have a plan link?</button></p>
+    <p class="note">Your answers stay in your AI chat. Your plan's link holds only exercises and numbers.</p>
+    <p class="note">This isn't medical advice. If something hurts, check with a doctor or physiotherapist first.</p>
+  </div>
+</section>
+
+<!-- A plan link with mistakes in it -->
+<section id="fix" class="screen" hidden>
+  <div class="wrap narrow">
+    <h1 class="title">This link needs a fix</h1>
+    <p class="subtitle">Your AI made a small mistake in the plan. Copy this message, paste it into the same chat, and it'll give you a corrected link.</p>
+    <div class="card"><div class="label">Message for your AI</div><p class="fix-msg" id="fix-msg"></p></div>
+    <div class="card-actions" style="margin-top:16px"><button class="big-btn" id="fix-copy">Copy message</button></div>
+    <p class="note" id="fix-status" role="status"></p>
+    <p class="note"><button class="link" id="fix-anyway">Open the rest of the plan anyway</button></p>
+    <p class="note"><button class="link" id="fix-home">Back to my plan</button></p>
+  </div>
+</section>
+
+<!-- Tabs: on the top-level screens only (never during a workout) -->
+<nav class="tabbar" id="tabbar" aria-label="Sections" hidden>
+  <button data-tab="home"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>My week</span></button>
+  <button data-tab="plans"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8M8 12h8M8 16h5"/></svg><span>Plans</span></button>
+  <button data-tab="exercises"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Exercises</span></button>
+</nav>
+
+<!-- Player: demo video + coaching panel -->
+<section id="player" hidden>
+  <div class="bar">
+    <button class="tool" id="exit-btn" aria-label="Exit">✕</button>
+    <div class="where">
+      <div class="line" id="where"></div>
+      <div class="progress"><i id="progress"></i></div>
+    </div>
+    <div class="demos">
+      <button class="tool" id="vid-prev" aria-label="Previous demo">‹</button>
+      <span class="count" id="vid-count"></span>
+      <button class="tool" id="vid-next" aria-label="Next demo">›</button>
+      <button class="tool" id="vid-restart" aria-label="Restart demo">↺</button>
+    </div>
+    <button class="tool sound" id="sound-btn" aria-label="Video sound"></button>
+    <button class="tool sound" id="voice-btn" aria-label="Coach voice"></button>
+  </div>
+  <div class="stage" id="stage">
+    <div class="video">
+      <div id="yt"></div>
+      <div class="fallback" id="video-fallback" hidden></div>
+      <div class="hint" id="video-hint" hidden></div>
+      <!-- During a rest: the next exercise as a still, so the screen isn't playing while it says Rest -->
+      <button class="rest-cover" id="rest-cover" hidden aria-label="Show the demo"><img alt="" id="rest-cover-img"><span class="rest-cover-text"><small id="rest-cover-label"></small><b id="rest-cover-name"></b><em>Tap to watch the demo</em></span></button>
+    </div>
+    <div class="panel" id="panel"></div>
+  </div>
+  <div class="finished" id="finished" hidden></div>
+  <div class="sheet-wrap" id="exit-sheet" hidden>
+    <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="exit-title">
+      <h2 id="exit-title">Leave this workout?</h2>
+      <p class="muted">The clock is paused. If you leave, this session isn't kept.</p>
+      <button class="big-btn" id="exit-keep">Keep going</button>
+      <button class="ghost-btn" id="exit-leave">Leave workout</button>
+    </div>
+  </div>
+</section>
+
+<script src="library.js?v=6df8df7"></script>
+<script src="plan.js?v=6df8df7"></script>
+<script src="speech.js?v=6df8df7"></script>
+<script src="prompt.js?v=6df8df7"></script>
+<script src="programs.js?v=6df8df7"></script>
+<script src="app.js?v=6df8df7"></script>
+</body>
+</html>
